@@ -20,8 +20,8 @@ import errorHandlerMiddleware from "./middleware/error-handler.js";
 //to have json available from post requests
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Welcome!");
+app.get("/api/v1", (req, res) => {
+  res.json({ msg: "API!" });
 });
 
 app.use("/api/v1/auth", authRouter);
