@@ -5,6 +5,8 @@ const app = express();
 
 import dotenv from "dotenv";
 dotenv.config();
+import "express-async-errors";
+import morgan from "morgan";
 
 //db and authenticate user
 import connectDB from "./db/connect.js";
@@ -17,6 +19,9 @@ import ticketsRouter from "./routes/ticketsRoutes.js";
 import notFoundMiddleware from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
 //to have json available from post requests
 app.use(express.json());
 
