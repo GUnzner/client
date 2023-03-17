@@ -12,6 +12,9 @@ import {
   LOGIN_USER_ERROR,
   TOGGLE_SIDEBAR,
   LOGOUT_USER,
+  UPDATE_USER_BEGIN,
+  UPDATE_USER_ERROR,
+  UPDATE_USER_SUCCESS,
 } from "./actions";
 
 const token = localStorage.getItem("token");
@@ -26,8 +29,15 @@ const initialState = {
   user: user ? JSON.parse(user) : null,
   token: token,
   userLocation: userLocation || "",
-  jobLocation: userLocation || "",
   showSidebar: false,
+  isEditing: false,
+  editTicketId: "",
+  category: ["new employee", "IT issues"],
+  title: "",
+  text: "",
+  urgency: ["low", "high", "critical"],
+  statusOptions: ["pending", "assigned", "solved"],
+  status: "pending",
 };
 
 const AppContext = React.createContext();
@@ -57,7 +67,7 @@ const AppProvider = ({ children }) => {
     },
     (error) => {
       if (error.response.status === 401) {
-        console.log("AUTH ERROR");
+        logoutUser();
       }
       return Promise.reject(error);
     }
@@ -135,9 +145,25 @@ const AppProvider = ({ children }) => {
   };
 
   const updateUser = async (currentUser) => {
+    dispatch({ type: UPDATE_USER_BEGIN });
     try {
       const { data } = await authFetch.patch("auth/updateUser", currentUser);
-    } catch (error) {}
+
+      const { user, location, token } = data;
+      dispatch({
+        type: UPDATE_USER_SUCCESS,
+        payload: { user, location, token },
+      });
+      addUserToLocalStorage({ user, location, token });
+    } catch (error) {
+      if (error.response.status !== 401) {
+        dispatch({
+          type: UPDATE_USER_ERROR,
+          payload: { msg: error.response.data.msg },
+        });
+      }
+    }
+    clearAlert();
   };
 
   return (
