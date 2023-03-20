@@ -1,10 +1,11 @@
-import { FormRow, Alert } from "../../components";
+import { FormRow, FormRowSelect, Alert } from "../../components";
 import { useAppContext } from "../../context/appContext";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
-import { Form } from "react-router-dom";
+//import { Form } from "react-router-dom";
 
 const AddTicket = () => {
   const {
+    isLoading,
     isEditing,
     showAlert,
     displayAlert,
@@ -12,13 +13,17 @@ const AddTicket = () => {
     title,
     text,
     urgency,
-    status,
-    statusOptions,
+    categoryOptions,
+    urgencyOptions,
+    handleChange,
+    clearValues,
+    createTicket,
   } = useAppContext();
 
   const handleTicketInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;
+    handleChange({ name, value });
   };
 
   const handleSubmit = (e) => {
@@ -27,6 +32,10 @@ const AddTicket = () => {
       displayAlert();
       return;
     }
+    if (isEditing) {
+      return;
+    }
+    createTicket();
   };
 
   return (
@@ -35,25 +44,12 @@ const AddTicket = () => {
         <h3>{isEditing ? "Edit ticket" : "Add ticket"}</h3>
         {showAlert && <Alert />}
         <div className="form-center">
-          <div className="form-row">
-            <label htmlFor="category" className="form-label">
-              Category
-            </label>
-            <select
-              name="category"
-              value={category}
-              onChange={handleTicketInput}
-              className="form-select"
-            >
-              {category.map((itemValue, index) => {
-                return (
-                  <option key={index} value={itemValue}>
-                    {itemValue}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
+          <FormRowSelect
+            name="category"
+            value={category}
+            handleChange={handleTicketInput}
+            list={categoryOptions}
+          ></FormRowSelect>
           <FormRow
             type="text"
             name="title"
@@ -66,33 +62,30 @@ const AddTicket = () => {
             value={text}
             handleChange={handleTicketInput}
           ></FormRow>
-          <div className="form-row">
-            <label htmlFor="urgency" className="form-label">
-              Urgency
-            </label>
-            <select
-              name="urgency"
-              value={urgency}
-              onChange={handleTicketInput}
-              className="form-select"
-            >
-              {urgency.map((itemValue, index) => {
-                return (
-                  <option key={index} value={itemValue}>
-                    {itemValue}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
+          <FormRowSelect
+            name="urgency"
+            value={urgency}
+            handleChange={handleTicketInput}
+            list={urgencyOptions}
+          ></FormRowSelect>
 
           <div className="btn-container">
             <button
               type="submit"
               className="btn btn-block submit-btn"
               onClick={handleSubmit}
+              disabled={isLoading}
             >
               Submit
+            </button>
+            <button
+              className="btn btn-block clear-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                clearValues();
+              }}
+            >
+              Clear
             </button>
           </div>
         </div>

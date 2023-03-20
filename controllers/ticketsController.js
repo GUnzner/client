@@ -18,7 +18,10 @@ const deleteTicket = async (req, res) => {
 };
 
 const getAllTickets = async (req, res) => {
-  res.send("get All Tickets");
+  const tickets = await Ticket.find({ createdBy: req.user.userId });
+  res
+    .status(StatusCodes.OK)
+    .json({ tickets, totalTickets: tickets.length, numOfPages: 1 });
 };
 
 const updateTicket = async (req, res) => {

@@ -15,6 +15,11 @@ import {
   UPDATE_USER_BEGIN,
   UPDATE_USER_ERROR,
   UPDATE_USER_SUCCESS,
+  HANDLE_CHANGE,
+  CLEAR_VALUES,
+  CREATE_TICKET_BEGIN,
+  CREATE_TICKET_SUCCESS,
+  CREATE_TICKET_ERROR,
 } from "./actions";
 
 const token = localStorage.getItem("token");
@@ -32,10 +37,12 @@ const initialState = {
   showSidebar: false,
   isEditing: false,
   editTicketId: "",
-  category: ["new employee", "IT issues"],
+  categoryOptions: ["new employee", "IT issues"],
+  category: "IT issues",
   title: "",
   text: "",
-  urgency: ["low", "high", "critical"],
+  urgencyOptions: ["low", "high", "critical"],
+  urgency: "low",
   statusOptions: ["pending", "assigned", "solved"],
   status: "pending",
 };
@@ -166,6 +173,36 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const handleChange = ({ name, value }) => {
+    dispatch({ type: HANDLE_CHANGE, payload: { name, value } });
+  };
+
+  const clearValues = () => {
+    dispatch({ type: CLEAR_VALUES });
+  };
+
+  const createTicket = async () => {
+    dispatch({ type: CREATE_TICKET_BEGIN });
+    try {
+      const { category, title, text, urgency } = state;
+      await authFetch.post("/tickets", {
+        category,
+        title,
+        text,
+        urgency,
+      });
+      dispatch({ type: CREATE_TICKET_SUCCESS });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: CREATE_TICKET_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -176,6 +213,9 @@ const AppProvider = ({ children }) => {
         toggleSidebar,
         logoutUser,
         updateUser,
+        handleChange,
+        clearValues,
+        createTicket,
       }}
     >
       {children}
