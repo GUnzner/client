@@ -18,6 +18,7 @@ const AddTicket = () => {
     handleChange,
     clearValues,
     createTicket,
+    editTicket,
   } = useAppContext();
 
   const handleTicketInput = (e) => {
@@ -33,6 +34,7 @@ const AddTicket = () => {
       return;
     }
     if (isEditing) {
+      editTicket();
       return;
     }
     createTicket();

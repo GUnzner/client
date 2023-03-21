@@ -1,4 +1,11 @@
+import { SearchContainer, TicketsContainer } from "../../components";
+
 const AllTickets = () => {
-  return <h1>All Tickets</h1>;
+  return (
+    <>
+      <SearchContainer />
+      <TicketsContainer />
+    </>
+  );
 };
 export default AllTickets;

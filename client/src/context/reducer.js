@@ -17,6 +17,9 @@ import {
   CREATE_TICKET_BEGIN,
   CREATE_TICKET_SUCCESS,
   CREATE_TICKET_ERROR,
+  GET_TICKET_BEGIN,
+  GET_TICKET_SUCCESS,
+  SET_EDIT_TICKET,
 } from "./actions";
 
 import { initialState } from "./appContext";
@@ -187,6 +190,41 @@ const reducer = (state, action) => {
       showAlert: true,
       alertType: "danger",
       alertText: action.payload.msg,
+    };
+  }
+
+  if (action.type === GET_TICKET_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+      showAlert: false,
+    };
+  }
+
+  if (action.type === GET_TICKET_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      tickets: action.payload.tickets,
+      totalTickets: action.payload.totalTickets,
+      numOfPages: action.payload.numOfPages,
+    };
+  }
+
+  if (action.type === SET_EDIT_TICKET) {
+    const ticket = state.tickets.find(
+      (ticket) => ticket._id === action.payload.id
+    );
+    const { _id, category, title, text, urgency, status } = ticket;
+    return {
+      ...state,
+      isEditing: true,
+      editTicketId: _id,
+      category,
+      title,
+      text,
+      urgency,
+      status,
     };
   }
 

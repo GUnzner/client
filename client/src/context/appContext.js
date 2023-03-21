@@ -20,6 +20,9 @@ import {
   CREATE_TICKET_BEGIN,
   CREATE_TICKET_SUCCESS,
   CREATE_TICKET_ERROR,
+  GET_TICKET_BEGIN,
+  GET_TICKET_SUCCESS,
+  SET_EDIT_TICKET,
 } from "./actions";
 
 const token = localStorage.getItem("token");
@@ -45,6 +48,10 @@ const initialState = {
   urgency: "low",
   statusOptions: ["pending", "assigned", "solved"],
   status: "pending",
+  tickets: [],
+  totalTickets: 0,
+  numOfPages: 1,
+  page: 1,
 };
 
 const AppContext = React.createContext();
@@ -203,6 +210,35 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const getTickets = async () => {
+    let url = `/tickets`;
+
+    dispatch({ type: GET_TICKET_BEGIN });
+    try {
+      const { data } = await authFetch.get(url);
+      const { tickets, totalTickets, numOfPages } = data;
+      dispatch({
+        type: GET_TICKET_SUCCESS,
+        payload: { tickets, totalTickets, numOfPages },
+      });
+    } catch (error) {
+      console.log(error.response);
+    }
+    clearAlert();
+  };
+
+  const setEditTicket = (id) => {
+    dispatch({ type: SET_EDIT_TICKET, payload: { id } });
+  };
+
+  const editTicket = () => {
+    console.log("edit ticket");
+  };
+
+  const deleteTicket = (id) => {
+    console.log(`delete ticket: ${id}`);
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -216,6 +252,10 @@ const AppProvider = ({ children }) => {
         handleChange,
         clearValues,
         createTicket,
+        getTickets,
+        setEditTicket,
+        deleteTicket,
+        editTicket,
       }}
     >
       {children}
