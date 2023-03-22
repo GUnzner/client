@@ -23,6 +23,10 @@ import {
   GET_TICKET_BEGIN,
   GET_TICKET_SUCCESS,
   SET_EDIT_TICKET,
+  DELETE_TICKET_BEGIN,
+  EDIT_TICKET_BEGIN,
+  EDIT_TICKET_SUCCESS,
+  EDIT_TICKET_ERROR,
 } from "./actions";
 
 const token = localStorage.getItem("token");
@@ -231,12 +235,38 @@ const AppProvider = ({ children }) => {
     dispatch({ type: SET_EDIT_TICKET, payload: { id } });
   };
 
-  const editTicket = () => {
-    console.log("edit ticket");
+  const editTicket = async () => {
+    dispatch({ type: EDIT_TICKET_BEGIN });
+    try {
+      const { category, title, urgency, text, status } = state;
+      await authFetch.patch(`/tickets/${state.editTicketId}`, {
+        category,
+        title,
+        urgency,
+        text,
+        status,
+      });
+      dispatch({ type: EDIT_TICKET_SUCCESS });
+      dispatch({ type: CLEAR_VALUES });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: EDIT_TICKET_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
   };
 
-  const deleteTicket = (id) => {
-    console.log(`delete ticket: ${id}`);
+  const deleteTicket = async (ticketId) => {
+    dispatch({ type: DELETE_TICKET_BEGIN });
+    try {
+      await authFetch.delete(`/tickets/${ticketId}`);
+      getTickets();
+    } catch (error) {
+      console.log(error.response);
+      // logoutUser();
+    }
   };
 
   return (

@@ -20,6 +20,10 @@ import {
   GET_TICKET_BEGIN,
   GET_TICKET_SUCCESS,
   SET_EDIT_TICKET,
+  DELETE_TICKET_BEGIN,
+  EDIT_TICKET_BEGIN,
+  EDIT_TICKET_SUCCESS,
+  EDIT_TICKET_ERROR,
 } from "./actions";
 
 import { initialState } from "./appContext";
@@ -225,6 +229,37 @@ const reducer = (state, action) => {
       text,
       urgency,
       status,
+    };
+  }
+
+  if (action.type === DELETE_TICKET_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+
+  if (action.type === EDIT_TICKET_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  }
+
+  if (action.type === EDIT_TICKET_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "success",
+      alertText: "Ticket updated!",
+    };
+  }
+
+  if (action.type === EDIT_TICKET_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
     };
   }
 
