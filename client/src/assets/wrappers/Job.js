@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const Wrapper = styled.article`
   background: var(--white);
@@ -45,11 +45,11 @@ const Wrapper = styled.article`
     background: #fcefc7;
     color: #e9b949;
   }
-  .interview {
-    background: #e0e8f9;
-    color: #647acb;
+  .solved {
+    background: #00873e;
+    color: #08ff08;
   }
-  .declined {
+  .assigned {
     color: #d66a6a;
     background: #ffeeee;
   }
@@ -79,6 +79,20 @@ const Wrapper = styled.article`
     width: 100px;
     height: 30px;
   }
+
+  .urgency {
+    margin-left: 10px;
+  }
+
+  .critical {
+    color: #f4364c;
+  }
+  .low {
+    color: #00873e;
+  }
+  .high {
+    color: black;
+  }
   footer {
     margin-top: 1rem;
   }
@@ -100,6 +114,6 @@ const Wrapper = styled.article`
   &:hover .actions {
     visibility: visible;
   }
-`
+`;
 
-export default Wrapper
+export default Wrapper;

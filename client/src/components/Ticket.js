@@ -24,7 +24,9 @@ const Ticket = ({ _id, title, text, urgency, category, createdAt, status }) => {
       <div className="content">
         <div className="content-center">
           <TicketInfo text={text} />
-          <TicketInfo icon={<FaClock />} text={urgency} />
+          <div className={`urgency ${urgency}`}>
+            <FaClock /> {urgency}
+          </div>
           <TicketInfo icon={<FaCalendarAlt />} text={date} />
           <div className={`status ${status}`}>{status}</div>
         </div>

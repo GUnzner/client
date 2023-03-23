@@ -7,6 +7,9 @@ import SmallSidebar from "./SmallSidebar";
 import { FormRowSelect } from "./FormRowSelect";
 import SearchContainer from "./SearchContainer";
 import TicketsContainer from "./TicketsContainer";
+import StatsContainer from "./StatsContainer";
+import ChartsContainer from "./ChartsContainer";
+import Loading from "./Loading";
 
 export {
   Logo,
@@ -18,4 +21,7 @@ export {
   FormRowSelect,
   SearchContainer,
   TicketsContainer,
+  StatsContainer,
+  ChartsContainer,
+  Loading,
 };

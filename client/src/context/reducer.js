@@ -24,6 +24,8 @@ import {
   EDIT_TICKET_BEGIN,
   EDIT_TICKET_SUCCESS,
   EDIT_TICKET_ERROR,
+  SHOW_STATS_BEGIN,
+  SHOW_STATS_SUCCESS,
 } from "./actions";
 
 import { initialState } from "./appContext";
@@ -260,6 +262,23 @@ const reducer = (state, action) => {
       showAlert: true,
       alertType: "danger",
       alertText: action.payload.msg,
+    };
+  }
+
+  if (action.type === SHOW_STATS_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+      showAlert: false,
+    };
+  }
+
+  if (action.type === SHOW_STATS_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      stats: action.payload.stats,
+      monthlyTickets: action.payload.monthlyTickets,
     };
   }
 

@@ -27,6 +27,8 @@ import {
   EDIT_TICKET_BEGIN,
   EDIT_TICKET_SUCCESS,
   EDIT_TICKET_ERROR,
+  SHOW_STATS_BEGIN,
+  SHOW_STATS_SUCCESS,
 } from "./actions";
 
 const token = localStorage.getItem("token");
@@ -56,6 +58,8 @@ const initialState = {
   totalTickets: 0,
   numOfPages: 1,
   page: 1,
+  stats: {},
+  monthlyTickets: [],
 };
 
 const AppContext = React.createContext();
@@ -269,6 +273,24 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  const showStats = async () => {
+    dispatch({ type: SHOW_STATS_BEGIN });
+    try {
+      const { data } = await authFetch.get("/tickets/stats");
+      dispatch({
+        type: SHOW_STATS_SUCCESS,
+        payload: {
+          stats: data.defaultStats,
+          monthlyTickets: data.monthlyTickets,
+        },
+      });
+    } catch (error) {
+      console.log(error.response);
+      logoutUser();
+    }
+    clearAlert();
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -286,6 +308,7 @@ const AppProvider = ({ children }) => {
         setEditTicket,
         deleteTicket,
         editTicket,
+        showStats,
       }}
     >
       {children}
