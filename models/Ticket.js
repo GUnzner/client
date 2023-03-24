@@ -5,7 +5,13 @@ const TicketSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, "Please provide category"],
-      enum: ["new employee", "IT issues"],
+      enum: [
+        "new employee",
+        "IT issues",
+        "document request",
+        "equipment request",
+        "HR & Payroll",
+      ],
     },
     urgency: {
       type: String,

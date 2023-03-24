@@ -5,12 +5,21 @@ import Ticket from "./Ticket";
 import Wrapper from "../assets/wrappers/JobsContainer";
 
 const TicketsContainer = () => {
-  const { getTickets, tickets, isLoading, page, totalTickets } =
-    useAppContext();
+  const {
+    getTickets,
+    tickets,
+    isLoading,
+    page,
+    totalTickets,
+    search,
+    searchStatus,
+    searchCategory,
+    sort,
+  } = useAppContext();
 
   useEffect(() => {
     getTickets();
-  }, []);
+  }, [search, searchStatus, searchCategory, sort]);
 
   if (isLoading) {
     return <Loading center />;

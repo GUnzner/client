@@ -26,6 +26,7 @@ import {
   EDIT_TICKET_ERROR,
   SHOW_STATS_BEGIN,
   SHOW_STATS_SUCCESS,
+  CLEAR_FILTERS,
 } from "./actions";
 
 import { initialState } from "./appContext";
@@ -279,6 +280,16 @@ const reducer = (state, action) => {
       isLoading: false,
       stats: action.payload.stats,
       monthlyTickets: action.payload.monthlyTickets,
+    };
+  }
+
+  if (action.type === CLEAR_FILTERS) {
+    return {
+      ...state,
+      search: "",
+      searchStatus: "all",
+      searchCategory: "all",
+      sort: "latest",
     };
   }
 

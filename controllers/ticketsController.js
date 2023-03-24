@@ -37,7 +37,33 @@ const deleteTicket = async (req, res) => {
 };
 
 const getAllTickets = async (req, res) => {
-  const tickets = await Ticket.find(/*{ createdBy: req.user.userId }*/);
+  const { status, category, sort, search } = req.query;
+  const queryObject = {};
+
+  if (status && status !== "all") {
+    queryObject.status = status;
+  }
+
+  if (category && category !== "all") {
+    queryObject.category = category;
+  }
+
+  if (search) {
+    queryObject.title = { $regex: search, $options: "i" };
+  }
+
+  let result = Ticket.find(queryObject);
+
+  if (sort === "latest") {
+    result = result.sort("-createdAt");
+  }
+
+  if (sort === "oldest") {
+    result = result.sort("createdAt");
+  }
+
+  const tickets = await result;
+
   res
     .status(StatusCodes.OK)
     .json({ tickets, totalTickets: tickets.length, numOfPages: 1 });
