@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import Loading from "./Loading";
 import Ticket from "./Ticket";
 import Wrapper from "../assets/wrappers/JobsContainer";
+import PageButtonContainer from "./PageButtonContainer";
 
 const TicketsContainer = () => {
   const {
@@ -15,11 +16,13 @@ const TicketsContainer = () => {
     searchStatus,
     searchCategory,
     sort,
+    numOfPages,
   } = useAppContext();
 
   useEffect(() => {
     getTickets();
-  }, [search, searchStatus, searchCategory, sort]);
+    // eslint-disable-next-line
+  }, [page, search, searchStatus, searchCategory, sort]);
 
   if (isLoading) {
     return <Loading center />;
@@ -43,6 +46,7 @@ const TicketsContainer = () => {
           return <Ticket key={ticket._id} {...ticket} />;
         })}
       </div>
+      {numOfPages > 1 && <PageButtonContainer />}
     </Wrapper>
   );
 };

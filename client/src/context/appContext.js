@@ -30,6 +30,7 @@ import {
   SHOW_STATS_BEGIN,
   SHOW_STATS_SUCCESS,
   CLEAR_FILTERS,
+  CHANGE_PAGE,
 } from "./actions";
 
 const token = localStorage.getItem("token");
@@ -231,8 +232,8 @@ const AppProvider = ({ children }) => {
   };
 
   const getTickets = async () => {
-    const { search, searchStatus, searchCategory, sort } = state;
-    let url = `/tickets?status=${searchStatus}&category=${searchCategory}&sort=${sort}`;
+    const { page, search, searchStatus, searchCategory, sort } = state;
+    let url = `/tickets?page=${page}&status=${searchStatus}&category=${searchCategory}&sort=${sort}`;
     if (search) {
       url = url + `&search=${search}`;
     }
@@ -246,7 +247,7 @@ const AppProvider = ({ children }) => {
         payload: { tickets, totalTickets, numOfPages },
       });
     } catch (error) {
-      console.log(error.response);
+      logoutUser();
     }
     clearAlert();
   };
@@ -285,7 +286,7 @@ const AppProvider = ({ children }) => {
       getTickets();
     } catch (error) {
       console.log(error.response);
-      // logoutUser();
+      logoutUser();
     }
   };
 
@@ -301,7 +302,6 @@ const AppProvider = ({ children }) => {
         },
       });
     } catch (error) {
-      console.log(error.response);
       logoutUser();
     }
     clearAlert();
@@ -309,6 +309,10 @@ const AppProvider = ({ children }) => {
 
   const clearFilters = () => {
     dispatch({ type: CLEAR_FILTERS });
+  };
+
+  const changePage = (page) => {
+    dispatch({ type: CHANGE_PAGE, payload: { page } });
   };
 
   return (
@@ -330,6 +334,7 @@ const AppProvider = ({ children }) => {
         editTicket,
         showStats,
         clearFilters,
+        changePage,
       }}
     >
       {children}

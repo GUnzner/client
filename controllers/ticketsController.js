@@ -62,11 +62,18 @@ const getAllTickets = async (req, res) => {
     result = result.sort("createdAt");
   }
 
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  result = result.skip(skip).limit(limit);
+
   const tickets = await result;
 
-  res
-    .status(StatusCodes.OK)
-    .json({ tickets, totalTickets: tickets.length, numOfPages: 1 });
+  const totalTickets = await Ticket.countDocuments(queryObject);
+  const numOfPages = Math.ceil(totalTickets / limit);
+
+  res.status(StatusCodes.OK).json({ tickets, totalTickets, numOfPages });
 };
 
 const updateTicket = async (req, res) => {
