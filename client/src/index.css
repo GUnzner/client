@@ -5,7 +5,7 @@
 }
 
 /* fonts */
-@import url('https://fonts.googleapis.com/css2?family=Cabin&family=Roboto+Condensed:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cabin&family=Roboto+Condensed:wght@400;700&display=swap");
 
 html {
   font-size: 100%;
@@ -44,8 +44,8 @@ html {
   --green-dark: #0f5132;
 
   /* fonts  */
-  --headingFont: 'Roboto Condensed', Sans-Serif;
-  --bodyFont: 'Cabin', Sans-Serif;
+  --headingFont: "Roboto Condensed", Sans-Serif;
+  --bodyFont: "Cabin", Sans-Serif;
   --small-text: 0.875rem;
   --extra-small-text: 0.7em;
   /* rest of the vars */
@@ -75,6 +75,7 @@ body {
   font-weight: 400;
   line-height: 1.75;
   color: var(--textColor);
+  margin-left: 1rem;
 }
 
 p {
@@ -157,6 +158,7 @@ ul {
   transition: var(--transition);
   text-transform: capitalize;
   display: inline-block;
+  margin-left: 0.5rem;
 }
 .btn:hover {
   background: var(--primary-700);
@@ -318,4 +320,102 @@ ul {
     display: inline-block;
     margin-right: 0.5rem;
   }
+}
+
+.comments {
+  margin-top: 20px;
+}
+
+.comments-title {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.comments-container {
+  margin-top: 40px;
+}
+
+.comment-form-title {
+  font-size: 22px;
+}
+
+.comment-form-textarea {
+  width: 100%;
+  height: 80px;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  border: 1px solid rgb(107, 114, 12);
+}
+
+.comment-form-button {
+  font-size: 16px;
+  padding: 8px 16px;
+  background: rgb(59, 130, 246);
+  border-radius: 8px;
+  color: white;
+}
+
+.comment-form-button:hover:enabled {
+  cursor: pointer;
+  background: rgb(37, 99, 235);
+}
+
+.comment-form-button:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.comment-form-cancel-button {
+  margin-left: 10px;
+}
+
+.comment {
+  display: flex;
+  margin-bottom: 28px;
+}
+
+.comment-image-container {
+  margin-right: 12px;
+}
+
+.comment-image-container img {
+  border-radius: 50px;
+}
+
+.comment-right-part {
+  width: 100%;
+}
+
+.comment-content {
+  display: flex;
+}
+
+.comment-author {
+  margin-right: 8px;
+  font-size: 20px;
+  color: rgb(59, 130, 246);
+}
+
+.comment-text {
+  font-size: 18px;
+}
+
+.comment-actions {
+  display: flex;
+  font-size: 12px;
+  color: rgb(51, 51, 51);
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.comment-action {
+  margin-right: 8px;
+}
+
+.comment-action:hover {
+  text-decoration: underline;
+}
+
+.replies {
+  margin-top: 20px;
 }

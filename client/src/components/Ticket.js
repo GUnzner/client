@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useAppContext } from "../context/appContext";
 import Wrapper from "../assets/wrappers/Job";
 import TicketInfo from "./TicketInfo";
-import Comments from "../comments/comments";
 
 const Ticket = ({ _id, title, text, urgency, category, createdAt, status }) => {
   const { setEditTicket, deleteTicket } = useAppContext();
@@ -47,7 +46,9 @@ const Ticket = ({ _id, title, text, urgency, category, createdAt, status }) => {
             >
               Delete
             </button>
-            <Comments currentUserId="1" />
+            <Link to="/comments" className="btn ">
+              Comments
+            </Link>
           </div>
         </footer>
       </div>
