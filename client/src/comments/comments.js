@@ -1,13 +1,18 @@
+import { set } from "mongoose";
 import { useState, useEffect } from "react";
 import {
   getComments as getCommentsApi,
   createComment as createCommentApi,
+  deleteComment as deleteCommentApi,
+  updateComment as updateCommentApi,
 } from "../commentsApi";
 import Comment from "./comment";
 import CommentForm from "./CommentForm";
 
 const Comments = ({ currentUserId }) => {
   const [backendComments, setBackendComments] = useState([]);
+  const [activeComment, setActiveComment] = useState(null);
+
   const rootComments = backendComments.filter(
     (backendComment) => backendComment.parentId === null
   );
@@ -25,6 +30,31 @@ const Comments = ({ currentUserId }) => {
     console.log(text, parentId);
     createCommentApi(text, parentId).then((comment) => {
       setBackendComments([comment, ...backendComments]);
+      setActiveComment(null);
+    });
+  };
+
+  const deleteComment = (commentId) => {
+    if (window.confirm("Are you sure that you want to delete your comment?")) {
+      deleteCommentApi(commentId).then(() => {
+        const updatedBackendComments = backendComments.filter(
+          (backendComment) => backendComment.id !== commentId
+        );
+        setBackendComments(updatedBackendComments);
+      });
+    }
+  };
+
+  const updateComment = (text, commentId) => {
+    updateCommentApi(text, commentId).then(() => {
+      const updatedBackendComments = backendComments.map((backendComment) => {
+        if (backendComment.id === commentId) {
+          return { ...backendComment, body: text };
+        }
+        return backendComment;
+      });
+      setBackendComments(updatedBackendComments);
+      setActiveComment(null);
     });
   };
 
@@ -44,6 +74,12 @@ const Comments = ({ currentUserId }) => {
             key={rootComment.id}
             comment={rootComment}
             replies={getReplies(rootComment.id)}
+            currentUserId={currentUserId}
+            deleteComment={deleteComment}
+            activeComment={activeComment}
+            setActiveComment={setActiveComment}
+            addComment={addComment}
+            updateComment={updateComment}
           />
         ))}
       </div>
