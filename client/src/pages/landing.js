@@ -5,11 +5,9 @@ import { Link } from "react-router-dom";
 const Landing = () => {
   return (
     <Wrapper>
-      <nav>
-        <Logo />
-      </nav>
       <div className="container page">
         <div className="info">
+          <Logo />
           <h1>Help Desk</h1>
           <p>Welcome to the Help Desk</p>
           <Link to="/register" className="btn btn-hero">

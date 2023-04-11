@@ -1,4 +1,3 @@
-import { set } from "mongoose";
 import { useState, useEffect } from "react";
 import {
   getComments as getCommentsApi,
@@ -9,7 +8,7 @@ import {
 import Comment from "./comment";
 import CommentForm from "./CommentForm";
 
-const Comments = ({ currentUserId }) => {
+const Comments = ({ currentUserId, title }) => {
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
 
@@ -65,7 +64,8 @@ const Comments = ({ currentUserId }) => {
   }, []);
   return (
     <div className="comments">
-      <h5>Comments</h5>
+      <h4>Comments</h4>
+      <h5>Ticket</h5>
       <div className="comment-form-title">Write comment</div>
       <CommentForm submitLabel="Write" handleSubmit={addComment} />
       <div className="comments-container">

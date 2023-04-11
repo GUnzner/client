@@ -31,6 +31,8 @@ import {
   SHOW_STATS_SUCCESS,
   CLEAR_FILTERS,
   CHANGE_PAGE,
+  GET_COMMENTS_BEGIN,
+  GET_COMMENTS_SUCCESS,
 } from "./actions";
 
 const token = localStorage.getItem("token");
@@ -73,6 +75,7 @@ const initialState = {
   searchCategory: "all",
   sort: "latest",
   sortOptions: ["latest", "oldest"],
+  ticketId: 1,
 };
 
 const AppContext = React.createContext();
@@ -252,6 +255,24 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const getCommentsUrl = async () => {
+    const { ticketId } = state;
+    let url = `/tickets/${ticketId}/comments`;
+
+    dispatch({ type: GET_COMMENTS_BEGIN });
+    try {
+      const { data } = await authFetch.get(url);
+      const { ticketId } = data;
+      dispatch({
+        type: GET_COMMENTS_SUCCESS,
+        payload: { ticketId },
+      });
+    } catch (error) {
+      logoutUser();
+    }
+    clearAlert();
+  };
+
   const setEditTicket = (id) => {
     dispatch({ type: SET_EDIT_TICKET, payload: { id } });
   };
@@ -335,6 +356,7 @@ const AppProvider = ({ children }) => {
         showStats,
         clearFilters,
         changePage,
+        getCommentsUrl,
       }}
     >
       {children}

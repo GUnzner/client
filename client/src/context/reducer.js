@@ -28,6 +28,8 @@ import {
   SHOW_STATS_SUCCESS,
   CLEAR_FILTERS,
   CHANGE_PAGE,
+  GET_COMMENTS_BEGIN,
+  GET_COMMENTS_SUCCESS,
 } from "./actions";
 
 import { initialState } from "./appContext";
@@ -299,6 +301,21 @@ const reducer = (state, action) => {
     return {
       ...state,
       page: action.payload.page,
+    };
+  }
+
+  if (action.type === GET_COMMENTS_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+      showAlert: false,
+    };
+  }
+
+  if (action.type === GET_COMMENTS_SUCCESS) {
+    return {
+      ...state,
+      ticketId: action.payload.ticketId,
     };
   }
 
