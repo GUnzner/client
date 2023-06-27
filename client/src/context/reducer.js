@@ -30,6 +30,8 @@ import {
   CHANGE_PAGE,
   GET_COMMENTS_BEGIN,
   GET_COMMENTS_SUCCESS,
+  GET_USER_BEGIN,
+  GET_USER_SUCCESS,
 } from "./actions";
 
 import { initialState } from "./appContext";
@@ -62,7 +64,7 @@ const reducer = (state, action) => {
     return {
       ...state,
       isLoading: false,
-      token: action.payload.token,
+      // token: action.payload.token,
       user: action.payload.user,
       userLocation: action.payload.location,
       showAlert: true,
@@ -92,7 +94,7 @@ const reducer = (state, action) => {
     return {
       ...state,
       isLoading: false,
-      token: action.payload.token,
+      // token: action.payload.token,
       user: action.payload.user,
       userLocation: action.payload.location,
       showAlert: true,
@@ -122,8 +124,9 @@ const reducer = (state, action) => {
     return {
       ...initialState,
       user: null,
-      token: null,
+      // token: null,
       userLocation: "",
+      userLoading: false,
     };
   }
 
@@ -138,7 +141,7 @@ const reducer = (state, action) => {
     return {
       ...state,
       isLoading: false,
-      token: action.payload.token,
+      // token: action.payload.token,
       user: action.payload.user,
       userLocation: action.payload.location,
       showAlert: true,
@@ -316,6 +319,19 @@ const reducer = (state, action) => {
     return {
       ...state,
       ticketId: action.payload.ticketId,
+    };
+  }
+
+  if (action.type === GET_USER_BEGIN) {
+    return { ...state, userLoading: true, showAlert: false };
+  }
+
+  if (action.type === GET_USER_SUCCESS) {
+    return {
+      ...state,
+      userLoading: false,
+      user: action.payload.user,
+      userLocation: action.payload.location,
     };
   }
 
