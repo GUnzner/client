@@ -34,12 +34,6 @@
     "moment": "^2.29.4",
     "mongoose": "^7.0.1",
     "morgan": "^1.10.0",
-    "normalize.css": "^8.0.1",
-    "react-icons": "^4.10.1",
-    "react-router-dom": "^6.13.0",
-    "react-scripts": "^5.0.1",
-    "recharts": "^2.7.2",
-    "styled-components": "^6.0.0-rc.6",
     "validator": "^13.9.0",
     "xss-clean": "^0.1.1"
   }
