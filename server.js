@@ -8,14 +8,14 @@ dotenv.config();
 import "express-async-errors";
 import morgan from "morgan";
 
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import path from "path";
 
-import helmet from 'helmet';
-import xss from 'xss-clean';
-import mongoSanitize from 'express-mongo-sanitize';
-import cookieParser from 'cookie-parser';
+import helmet from "helmet";
+import xss from "xss-clean";
+import mongoSanitize from "express-mongo-sanitize";
+import cookieParser from "cookie-parser";
 
 //db and authenticate user
 import connectDB from "./db/connect.js";
@@ -23,6 +23,7 @@ import connectDB from "./db/connect.js";
 //routers
 import authRouter from "./routes/authRoutes.js";
 import ticketsRouter from "./routes/ticketsRoutes.js";
+import commentsRouter from "./routes/commentsRoutes.js";
 
 //middleware
 import notFoundMiddleware from "./middleware/not-found.js";
@@ -35,7 +36,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-app.use(express.static(path.resolve(__dirname, './client/build')));
+app.use(express.static(path.resolve(__dirname, "./client/build")));
 
 //to have json available from post requests
 app.use(express.json());
@@ -50,9 +51,10 @@ app.get("/api/v1", (req, res) => {
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/tickets", authenticateUser, ticketsRouter);
+app.use("/api/v1/comments", authenticateUser, commentsRouter);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
 });
 
 app.use(notFoundMiddleware);

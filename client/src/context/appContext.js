@@ -311,7 +311,9 @@ const AppProvider = ({ children }) => {
       getTickets();
     } catch (error) {
       console.log(error.response);
-      logoutUser();
+      alert(
+        "You are not allowed to delete this ticket, as it was not created by you"
+      );
     }
   };
 
