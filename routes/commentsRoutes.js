@@ -6,12 +6,11 @@ import {
   createComment,
   deleteComment,
   getComments,
-  //updateComment,
+  updateComment,
 } from "../controllers/commentsController.js";
 
 router.route("/").post(createComment);
 router.route("/").get(getComments);
-router.route("/:id").delete(deleteComment)
-//.patch(updateComment);
+router.route("/:id").delete(deleteComment).patch(updateComment);
 
 export default router;

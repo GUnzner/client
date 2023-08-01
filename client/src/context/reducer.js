@@ -32,6 +32,15 @@ import {
   GET_COMMENTS_SUCCESS,
   GET_USER_BEGIN,
   GET_USER_SUCCESS,
+  CREATE_COMMENT_BEGIN,
+  CREATE_COMMENT_SUCCESS,
+  CREATE_COMMENT_ERROR,
+  SET_EDIT_COMMENT,
+  DELETE_COMMENT_BEGIN,
+  EDIT_COMMENT_BEGIN,
+  EDIT_COMMENT_SUCCESS,
+  EDIT_COMMENT_ERROR,
+  CLEAR_VALUES_COMMENT,
 } from "./actions";
 
 import { initialState } from "./appContext";
@@ -176,6 +185,18 @@ const reducer = (state, action) => {
       title: "",
       text: "",
       urgency: "",
+    };
+    return {
+      ...state,
+      ...initialState,
+    };
+  }
+
+  if (action.type === CLEAR_VALUES_COMMENT) {
+    const initialState = {
+      isEditing: false,
+      editCommentId: "",
+      text: "",
     };
     return {
       ...state,
@@ -332,6 +353,74 @@ const reducer = (state, action) => {
       userLoading: false,
       user: action.payload.user,
       userLocation: action.payload.location,
+    };
+  }
+
+  if (action.type === CREATE_COMMENT_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+
+  if (action.type === CREATE_COMMENT_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+    };
+  }
+
+  if (action.type === CREATE_COMMENT_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+    };
+  }
+
+  if (action.type === SET_EDIT_COMMENT) {
+    const comment = state.comments.find(
+      (comment) => comment._id === action.payload.id
+    );
+    const { _id, text, userId, ticketId, createdAt } = comment;
+    return {
+      ...state,
+      isEditing: true,
+      editCommentId: _id,
+      text,
+      userId,
+      ticketId,
+      createdAt,
+    };
+  }
+
+  if (action.type === DELETE_COMMENT_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+
+  if (action.type === EDIT_COMMENT_BEGIN) {
+    return {
+      ...state,
+      isLoading: true,
+    };
+  }
+
+  if (action.type === EDIT_COMMENT_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "success",
+      alertText: "Comment updated!",
+    };
+  }
+
+  if (action.type === EDIT_COMMENT_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
     };
   }
 

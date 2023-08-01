@@ -35,6 +35,15 @@ import {
   GET_COMMENTS_SUCCESS,
   GET_USER_BEGIN,
   GET_USER_SUCCESS,
+  CREATE_COMMENT_BEGIN,
+  CREATE_COMMENT_SUCCESS,
+  CREATE_COMMENT_ERROR,
+  SET_EDIT_COMMENT,
+  DELETE_COMMENT_BEGIN,
+  EDIT_COMMENT_BEGIN,
+  EDIT_COMMENT_SUCCESS,
+  EDIT_COMMENT_ERROR,
+  CLEAR_VALUES_COMMENT,
 } from "./actions";
 
 // const token = localStorage.getItem("token");
@@ -238,6 +247,28 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const createComment = async () => {
+    dispatch({ type: CREATE_COMMENT_BEGIN });
+    try {
+      const { text, userId, ticketId, createdAt } = state;
+      await authFetch.post("/comments", {
+        text,
+        userId,
+        ticketId,
+        createdAt,
+      });
+      dispatch({ type: CREATE_COMMENT_SUCCESS });
+      dispatch({ type: CLEAR_VALUES_COMMENT });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: CREATE_COMMENT_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+
   const getTickets = async () => {
     const { page, search, searchStatus, searchCategory, sort } = state;
     let url = `/tickets?page=${page}&status=${searchStatus}&category=${searchCategory}&sort=${sort}`;
@@ -304,6 +335,32 @@ const AppProvider = ({ children }) => {
     clearAlert();
   };
 
+  const setEditComment = (id) => {
+    dispatch({ type: SET_EDIT_COMMENT, payload: { id } });
+  };
+
+  const editComment = async () => {
+    dispatch({ type: EDIT_COMMENT_BEGIN });
+    try {
+      const { text, userId, ticketId, createdAt } = state;
+      await authFetch.patch(`/comments/${state.editCommentId}`, {
+        text,
+        userId,
+        ticketId,
+        createdAt,
+      });
+      dispatch({ type: EDIT_COMMENT_SUCCESS });
+      dispatch({ type: CLEAR_VALUES_COMMENT });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: EDIT_COMMENT_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+
   const deleteTicket = async (ticketId) => {
     dispatch({ type: DELETE_TICKET_BEGIN });
     try {
@@ -313,6 +370,19 @@ const AppProvider = ({ children }) => {
       console.log(error.response);
       alert(
         "You are not allowed to delete this ticket, as it was not created by you"
+      );
+    }
+  };
+
+  const deleteComment = async (commentId) => {
+    dispatch({ type: DELETE_COMMENT_BEGIN });
+    try {
+      await authFetch.delete(`/comments/${commentId}`);
+      getCommentsUrl();
+    } catch (error) {
+      console.log(error.response);
+      alert(
+        "You are not allowed to delete this comment, as it was not created by you"
       );
     }
   };
@@ -379,6 +449,10 @@ const AppProvider = ({ children }) => {
         clearFilters,
         changePage,
         getCommentsUrl,
+        createComment,
+        setEditComment,
+        editComment,
+        deleteComment,
       }}
     >
       {children}

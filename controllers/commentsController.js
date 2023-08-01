@@ -50,28 +50,26 @@ const deleteComment = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "Success! Comment removed" });
 };
 
-// const updateComment = async (req, res) => {
-//   const { id: commentId } = req.params;
-//   const { text, userId, parentId } = req.body;
+const updateComment = async (req, res) => {
+  const { id } = req.params;
+  const { text, userId } = req.body;
 
-//   if (!text) {
-//     throw new BadRequestError("Please enter text");
-//   }
-//   const comment = await Comment.findOne({ _id: commentId });
+  if (!text) {
+    throw new BadRequestError("Please enter text");
+  }
+  const comment = await Comment.findOne({ _id: id });
 
-//   if (!comment) {
-//     throw new NotFoundError(`No comment with id: ${commentId}`);
-//   }
+  if (!comment) {
+    throw new NotFoundError(`No comment with id: ${id}`);
+  }
 
-//   checkPermissions(req.user, comment.createdBy);
+  checkPermissions(req.user, comment.userId);
 
-//   const updatedComment = await Comment.findOneAndUpdate(
-//     { _id: commentId },
-//     req.body,
-//     { new: true, runValidators: true }
-//   );
-//   res.status(StatusCodes.OK).json({ updatedComment });
-// };
+  const updatedComment = await Comment.findOneAndUpdate({ _id: id }, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  res.status(StatusCodes.OK).json({ updatedComment });
+};
 
-//export { createComment, deleteComment, getComments, updateComment };
-export { createComment, getComments, deleteComment };
+export { createComment, deleteComment, getComments, updateComment };

@@ -26,7 +26,17 @@ const Comments = ({ currentUserId, title }) => {
   };
 
   const addComment = (text, parentId) => {
-    console.log(text, parentId);
+    const {
+      isLoading,
+      isEditing,
+      showAlert,
+      displayAlert,
+      text,
+      handleChange,
+      clearValues,
+      createComment,
+      editComment,
+    } = useAppContext();
     createCommentApi(text, parentId).then((comment) => {
       setBackendComments([comment, ...backendComments]);
       setActiveComment(null);
